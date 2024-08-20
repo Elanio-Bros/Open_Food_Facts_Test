@@ -1,5 +1,8 @@
 # Backend Challenge 20230105
 
+<details>
+<summary>Detalhes do Teste </summary>
+
 ## Introdução
 
 Nesse desafio trabalharemos no desenvolvimento de uma REST API para utilizar os dados do projeto Open Food Facts, que é um banco de dados aberto com informação nutricional de diversos produtos alimentícios.
@@ -87,3 +90,4 @@ Na REST API teremos um CRUD com os seguintes endpoints:
 ## Suporte
 
 Use a [nossa comunidade](https://discord.gg/rdXbEvjsWu) para tirar dúvidas sobre o processo ou envie uma mensagem diretamente a um especialista no chat da plataforma. 
+</details>
