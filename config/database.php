@@ -94,11 +94,13 @@ return [
         ],
 
         'mongodb' => [
-            'driver' => 'mongodb',
-            'dsn' => sprintf("mongodb+srv://%s:%s@%s:%s/%s?retryWrites=true&w=majority", env('DB_USERNAME', 'username'), env('DB_PASSWORD', 'password'), env('DB_HOST', 'localhost'), env('DB_PORT', '27017'), env('DB_DATABASE', 'default')),
-            // 'dsn' => 'mongodb+srv://username:password@<atlas-cluster-uri>/myappdb?retryWrites=true&w=majority',
-            'database' => 'myappdb',
-        ]
+        'driver'   => 'mongodb',
+        'host'     => env('DB_HOST', 'localhost'),
+        'port'     => env('DB_PORT', 27017),
+        'database' => env('DB_DATABASE','mongodb'),
+        'username' => env('DB_USERNAME', 'username'),
+        'password' => env('DB_PASSWORD', 'password'),
+    ],
     ],
 
     /*
