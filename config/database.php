@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'mongodb'),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,6 +93,12 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'dsn' => sprintf("mongodb+srv://%s:%s@%s:%s/%s?retryWrites=true&w=majority", env('DB_USERNAME', 'username'), env('DB_PASSWORD', 'password'), env('DB_HOST', 'localhost'), env('DB_PORT', '27017'), env('DB_DATABASE', 'default')),
+            // 'dsn' => 'mongodb+srv://username:password@<atlas-cluster-uri>/myappdb?retryWrites=true&w=majority',
+            'database' => 'myappdb',
+        ]
     ],
 
     /*
@@ -125,7 +131,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [
