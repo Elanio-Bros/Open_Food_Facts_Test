@@ -12,7 +12,6 @@ RUN apt-get install -y libzip-dev \
 
 RUN docker-php-ext-install zip
 RUN pecl install mongodb && docker-php-ext-enable mongodb
-RUN echo "extension=mongodb.so" >> /usr/local/etc/php/php.ini
 
 RUN a2enmod rewrite
 

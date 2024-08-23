@@ -94,13 +94,16 @@ return [
         ],
 
         'mongodb' => [
-        'driver'   => 'mongodb',
-        'host'     => env('DB_HOST', 'localhost'),
-        'port'     => env('DB_PORT', 27017),
-        'database' => env('DB_DATABASE','mongodb'),
-        'username' => env('DB_USERNAME', 'username'),
-        'password' => env('DB_PASSWORD', 'password'),
-    ],
+            'driver'   => 'mongodb',
+            'host'     => env('DB_HOST', 'localhost'),
+            'port'     => env('DB_PORT', 27017),
+            'database' => env('DB_DATABASE', 'mongodb'),
+            'username' => env('DB_USERNAME', 'username'),
+            'password' => env('DB_PASSWORD', 'password'),
+            'options' => [
+                'database' => env('DB_AUTHENTICATION_DATABASE', 'admin'), // required with Mongo 3+
+            ],
+        ],
     ],
 
     /*

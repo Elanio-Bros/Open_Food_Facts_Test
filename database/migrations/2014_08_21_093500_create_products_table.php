@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigInteger("code");
-            $table->enum('status', ["draft", "trash", "published"]);
+            $table->enum('status', ["draft", "published", "trash"]);
             $table->timestamp('imported_t')->useCurrent();
             $table->string("url");
             $table->string("creator");

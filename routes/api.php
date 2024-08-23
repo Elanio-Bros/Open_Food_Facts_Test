@@ -14,6 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/', function () {
+    // phpinfo()
+    return response()->json([''],200);
 });
+
+Route::get('/products', [App\Http\Controllers\Product::class, 'list_products']);
+Route::get('/products/{code}', [App\Http\Controllers\Product::class, 'get_product']);
+Route::put('/products/{code}', [App\Http\Controllers\Product::class, 'update_product']);
+Route::delete('/products/{code}', [App\Http\Controllers\Product::class, 'delete_product']);
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
