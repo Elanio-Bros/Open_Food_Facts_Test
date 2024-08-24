@@ -14,10 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    // phpinfo()
-    return response()->json([''],200);
-});
+Route::get('/', [App\Http\Controllers\System::class, 'get_info_serve']);
 
 Route::get('/products', [App\Http\Controllers\Product::class, 'list_products']);
 Route::get('/products/{code}', [App\Http\Controllers\Product::class, 'get_product']);
