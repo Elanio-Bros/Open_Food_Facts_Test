@@ -22,11 +22,11 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
     Route::get('/products', [App\Http\Controllers\Product::class, 'list_products']);
     Route::get('/products/{code}', [App\Http\Controllers\Product::class, 'get_product']);
-    Route::delete('/products/{code}', [App\Http\Controllers\Product::class, 'delete_product']);
 
     // admin
     Route::group(['middleware' => 'admin'], function () {
         Route::get('/', [App\Http\Controllers\System::class, 'get_info_serve']);
         Route::put('/products/{code}', [App\Http\Controllers\Product::class, 'update_product']);
+        Route::delete('/products/{code}', [App\Http\Controllers\Product::class, 'delete_product']);
     });
 });

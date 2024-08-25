@@ -18,7 +18,7 @@ E também com um user pré-registrado:
 > Password: user_123 <br/>
 
 <details>
-<summary> Detalhes do Teste</summary>
+<summary> Detalhes do Teste </summary>
 
 # Detalhes do Teste [Coodesh](https://coodesh.com/)
 
@@ -226,3 +226,6 @@ php artisan db:seed --class=ProductSeeder
 Para configurar o cron e a fila no laravel, siga as instruções de configuração:
 - [queue](https://laravel.com/docs/10.x/queues#running-the-queue-worker)
 - [cron](https://laravel.com/docs/10.x/scheduling#running-the-scheduler)
+</details>
+
+Documentação das rotas da api em [Api Documentation](./docs/api.swagger.json)

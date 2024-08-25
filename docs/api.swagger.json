@@ -1,0 +1,678 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Api Open Food Facts",
+        "description": "Crud da base de Dados Open Food Facts",
+        "contact": {
+            "email": "elaniobros@gmail.com"
+        },
+        "version": "0.1"
+    },
+    "servers": [{
+        "url": "http://127.0.0.1:80",
+        "description": "locahost"
+    }],
+    "tags": [{
+            "name": "Systema",
+            "description": "Rotas de Systema"
+        },
+        {
+            "name": "login",
+            "description": "Rotas token jwt"
+        },
+        {
+            "name": "Products",
+            "description": "Operações com os Produtos"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "Systema"
+                ],
+                "summary": "Ver Detalhes da Api",
+                "responses": {
+                    "201": {
+                        "description": "return sucesse created plan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "time_cron": {
+                                            "oneOf": [{
+                                                "type": "string",
+                                                "format": "datetime"
+                                            }, {
+                                                "type": "boolean"
+                                            }]
+                                        },
+                                        "db_connection": {
+                                            "type": "boolean"
+                                        },
+                                        "time": {
+                                            "type": "string",
+                                            "format": "datetime"
+                                        },
+                                        "memory": {
+                                            "type": "string",
+                                            "example": "1mb"
+                                        },
+                                        "erros_import": {
+                                            "oneOf": [{
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "message": {
+                                                                "type": "string"
+                                                            },
+                                                            "code": {
+                                                                "type": "string"
+                                                            },
+                                                            "list": {
+                                                                "type": "string"
+                                                            },
+                                                            "date": {
+                                                                "type": "string",
+                                                                "format": "datetime"
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "type": "boolean",
+                                                    "example": "false"
+                                                }
+                                            ]
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "return erro on produt not found"
+                    }
+                },
+                "security": [{
+                    "bearerAuth": []
+                }]
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "login"
+                ],
+                "summary": "login user",
+                "parameters": [{
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informações de Auntenticação do Usuário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Response_Login"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "envio errado de informações"
+                    },
+                    "401": {
+                        "description": "Usuário não autorizado"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "login"
+                ],
+                "summary": "logout user",
+                "responses": {
+                    "200": {
+                        "description": "sucess user logout"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/refresh": {
+            "post": {
+                "tags": [
+                    "login"
+                ],
+                "summary": "faz reloado do token do usuário",
+                "responses": {
+                    "200": {
+                        "description": "Informações de Auntenticação do Usuário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Response_Login"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "retorna a listagem de produtos paginado",
+                "parameters": [{
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "plan list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Paginate"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{
+                    "bearerAuth": []
+                }]
+            }
+        },
+        "/products/{code}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "pegar produto selecionado",
+                "parameters": [{
+                    "name": "code",
+                    "in": "path",
+                    "description": "código do produto a ser obtido",
+                    "required": true,
+                    "style": "simple",
+                    "explode": false,
+                    "schema": {
+                        "type": "integer"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "return plan selected",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Product"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "return erro on plan not found"
+                    }
+                },
+                "security": [{
+                    "bearerAuth": []
+                }]
+            },
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Atualizar Informações de um produto ",
+                "parameters": [{
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["draft", "published", "trash"]
+                        }
+                    }, {
+                        "name": "url",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "url"
+                        }
+                    },
+                    {
+                        "name": "product_name",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "quantity",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }, {
+                        "name": "brands",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "categories",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "labels",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "cities",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "purchase_places",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ingredients_text",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "traces",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "serving_size",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "serving_quantity",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "number",
+                            "minimum": 0
+                        }
+                    },
+                    {
+                        "name": "nutriscore_score",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "number",
+                            "minimum": 0
+                        }
+                    },
+                    {
+                        "name": "nutriscore_grade",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "main_category",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "image_url",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "url"
+                        }
+                    }
+
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return plan update with message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Product_update"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "retorna erro de produto não encontrado"
+                    }
+                },
+                "security": [{
+                    "bearerAuth": []
+                }]
+            },
+            "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Colocar produto em status trash",
+                "parameters": [{
+                    "name": "title",
+                    "in": "query",
+                    "required": false,
+                    "style": "form",
+                    "explode": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "produto colocado como deletado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Product_update"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "retorna erro de produto não encontrado"
+                    }
+                },
+                "security": [{
+                    "bearerAuth": []
+                }]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Response_Login": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "format": "bearer",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "bearer"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "example": 1440
+                    }
+                }
+            },
+            "Product": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "title"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "description"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "Y-m-d",
+                        "example": "0000-00-00"
+                    },
+                    "update_at": {
+                        "type": "string",
+                        "format": "Y-m-d H:i:s",
+                        "example": "0000-00-00 00:00:00"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "Y-m-d H:i:s",
+                        "example": "0000-00-00 00:00:00"
+                    }
+                }
+            },
+            "Product_update": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "product": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/Product"
+                    }
+                }
+            },
+            "Paginate_Product": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "title"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "Y-m-d",
+                        "example": "0000-00-00"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "Y-m-d H:i:s",
+                        "example": "0000-00-00 00:00:00"
+                    }
+                }
+            },
+            "List": {
+                "type": "object",
+                "description": "Normal list in route",
+                "properties": {
+                    "Product": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Paginate_Product"
+                        }
+                    },
+                    "count": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "Paginate": {
+                "type": "object",
+                "description": "List in paginate parameter is true",
+                "properties": {
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Paginate_Product"
+                        }
+                    },
+                    "first_page_url": {
+                        "type": "string",
+                        "format": "url"
+                    },
+                    "from": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "last_page_url": {
+                        "type": "string",
+                        "format": "url"
+                    },
+                    "next_page_url": {
+                        "type": "string",
+                        "format": "url"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "prev_page_url": {
+                        "type": "string",
+                        "format": "url"
+                    },
+                    "total": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
