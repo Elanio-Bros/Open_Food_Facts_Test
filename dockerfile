@@ -33,4 +33,4 @@ COPY . .
 
 RUN composer install
 
-CMD docker-php-entrypoint apache2-foreground && /usr/bin/supervisord -c /etc/supervisor/supervisor.conf
+CMD /usr/bin/supervisord -n -c /etc/supervisor/supervisor.conf

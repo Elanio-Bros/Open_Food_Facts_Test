@@ -163,6 +163,6 @@ If you want to use a product for testing, use the command:
 php artisan db:seed --class=ProductSeeder
 ```
 
-To configure cron and queue in laravel, follow the configuration instructions
+To configure cron and queue in laravel, follow the configuration instructions:
 - [queue](https://laravel.com/docs/10.x/queues#running-the-queue-worker)
 - [cron](https://laravel.com/docs/10.x/scheduling#running-the-scheduler)
