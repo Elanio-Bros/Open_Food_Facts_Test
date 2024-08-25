@@ -4,14 +4,17 @@ namespace Tests\Feature;
 
 use App\Models\Products;
 use Tests\TestCase;
+use App\Models\Users;
+use Illuminate\Support\Facades\Auth;
 
 class ProductTest extends TestCase
 {
 
     public function test_list_products()
     {
+        $user = Users::where('type', '=', 'admin')->first();
         $product_count = Products::count();
-        $response = $this->get('/products?' . http_build_query(['per_page' => 1]));
+        $response = $this->withHeader('Authorization', 'Bearer ' . Auth::tokenById($user->id))->get('/products?' . http_build_query(['per_page' => 1]));
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'current_page',
@@ -55,8 +58,9 @@ class ProductTest extends TestCase
 
     public function test_get_product()
     {
+        $user = Users::where('type', '=', 'admin')->first();
         $product = Products::first();
-        $response = $this->get("/products/{$product['code']}");
+        $response = $this->withHeader('Authorization', 'Bearer ' . Auth::tokenById($user->id))->get("/products/{$product['code']}");
         $response->assertStatus(200)
             ->assertJsonStructure([
                 "code",
@@ -87,9 +91,10 @@ class ProductTest extends TestCase
 
     public function test_edit_product()
     {
+        $user = Users::where('type', '=', 'admin')->first();
         $product = Products::first();
         $name = fake()->name();
-        $response = $this->put("/products/{$product['code']}", ['product_name' => $name]);
+        $response = $this->withHeader('Authorization', 'Bearer ' . Auth::tokenById($user->id))->put("/products/{$product['code']}", ['product_name' => $name]);
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'message',

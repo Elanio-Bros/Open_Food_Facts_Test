@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class System extends Controller
 {
@@ -18,6 +20,41 @@ class System extends Controller
         ];
 
         return response()->json($response, 200);
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $this->validate($request, [
+            'email' => 'email|required',
+            'password' => 'string|required'
+        ]);
+
+        if (! $token = Auth::attempt($credentials)) {
+            return response()->json(['error' => 'user', 'message' => 'Unauthorized'], 401);
+        }
+
+        return $this->respondWithToken($token);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function refresh()
+    {
+        return $this->respondWithToken(Auth::refresh());
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'token' => $token,
+            'type' => 'bearer',
+            'expires_in' => Auth::factory()->getTTL() * 60
+        ]);
     }
 
     private function usage_memory()
