@@ -17,11 +17,14 @@ RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 RUN a2enmod rewrite
 
-RUN echo "* * * * * root php /var/www/artisan schedule:run >> /var/log/cron.log 2>&1" >> /root/crontab
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 777 /var/www/html
+
+RUN echo "* * * * * root php /var/www/html/artisan schedule:run >> /var/log/cron.log 2>&1" >> /etc/crontab
+RUN touch /var/log/cron.log
+
 COPY ./supervisor.conf /etc/supervisor/supervisor.conf
 RUN mkdir /etc/supervisor/logs
-RUN touch /var/log/cron.log
-RUN crontab /root/crontab
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
@@ -30,4 +33,4 @@ COPY . .
 
 RUN composer install
 
-CMD cron && tail -f /var/log/cron.log  & /usr/bin/supervisord -c /etc/supervisor/supervisor.conf
+CMD docker-php-entrypoint apache2-foreground && /usr/bin/supervisord -c /etc/supervisor/supervisor.conf
