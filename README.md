@@ -1,5 +1,6 @@
 # Backend Challenge 20230105
 
+
 <details>
 <summary>Detalhes do Teste </summary>
 
@@ -91,3 +92,77 @@ Na REST API teremos um CRUD com os seguintes endpoints:
 
 Use a [nossa comunidade](https://discord.gg/rdXbEvjsWu) para tirar dúvidas sobre o processo ou envie uma mensagem diretamente a um especialista no chat da plataforma. 
 </details>
+
+
+# Back-End-Developer-Test-Buzzvel
+## Resume
+The idea of ​​this project is to use the Laravel framework to start a plan management project, using system integration tests and authentication via JWT.
+The system already comes with a pre-registered user: 
+> User: User_1 <br/>
+> Email: user_1@email.com.br <br/>
+> Password: user_1%123 <br/>
+
+Below are two ways to run the application :
+
+<details>
+<summary>Without Docker</summary>
+
+### Essential
+Before activating the project, you must first configure the **.env** file. This file is extremely important for the project because it contains the main system settings. The [.env.example] file will serve as the basis for our system. The variables to be configured in this file are
+
+### Requirements
+ - [PHP 8.0](https://www.php.net/)
+ - [Composer](https://getcomposer.org/)
+ 
+<details>
+<summary>Settings in .env</summary>
+
+### Database
+`DB_HOST`-> database host<br>
+`DB_DATABASE`->The main database<br>
+`DB_PORT`->Port used in the database system<br>
+`DB_USERNAME`->database user<br>
+`DB_PASSWORD`->database password<br>
+
+</details>
+<br>
+
+After making the appropriate configurations in the **.env** file, run some terminal commands within the repository:
+
+1. Install all project dependencies with composer
+```bash
+composer install
+```
+2. Generate application encryption key
+```bash
+php artisan key:generate
+```
+3. Generate JWT encryption and authentication key
+```bash
+php artisan jwt:secret
+```
+4. Create databases and initial segments
+```bash
+php artisan migrate --seed
+```
+5. Start a local server
+```bash
+php artisan serve
+```
+
+## Finished
+If you want to use it on an independent server, you must redirect to [/public/index.php](public/index.php) for the application to work correctly.
+
+If you want, run the tests to analyze whether the routes in the application are in order:
+```bash
+php artisan test
+```
+
+If you want to use a product for testing, use the command:
+```bash
+php artisan db:seed --class=ProductSeeder
+```
+
+To configure cron and queue in laravel, follow the configuration instructions
+- [queue](https://laravel.com/docs/10.x/queues#running-the-queue-worker)
+- [cron](https://laravel.com/docs/10.x/scheduling#running-the-scheduler)
