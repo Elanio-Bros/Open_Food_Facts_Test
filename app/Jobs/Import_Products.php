@@ -64,10 +64,11 @@ class Import_Products implements ShouldQueue
                     Products::create($product);
                 }
             } catch (Exception $e) {
-                $erros = ['message' => 'product not imported', 'code' => $product['code'], 'list' => $this->list_products];
+                $erros = ['message' => 'product not imported', 'code' => $product['code'], 'list' => $this->list_products, 'date' => now()->toDateTimeString()];
             }
         }
-        
+
+        Cache::forever('erros_import', $erros);
         Cache::forever('import_products', now()->toDateTimeString());
         Storage::delete($path);
     }

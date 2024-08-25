@@ -12,7 +12,7 @@ class InitTest extends TestCase
     {
         $user = Users::where('type', '=', 'admin')->first();
         $response = $this->withHeader('Authorization', 'Bearer ' . Auth::tokenById($user->id))->get('/');
-        $response->assertStatus(200)->assertJsonStructure(['time_cron', 'db_connection', 'time', 'memory']);
+        $response->assertStatus(200)->assertJsonStructure(['time_cron', 'db_connection', 'time', 'memory', 'erros_import']);
     }
 
     public function test_home_user_not_acess()
@@ -42,7 +42,8 @@ class InitTest extends TestCase
     {
         $response = $this->post('/login');
         $response->assertStatus(422)->assertJsonStructure([
-            'email', 'password'
+            'email',
+            'password'
         ]);
     }
 
@@ -52,5 +53,4 @@ class InitTest extends TestCase
         $response = $this->withHeader('Authorization', 'Bearer ' . Auth::tokenById($user->id))->post('/logout');
         $response->assertStatus(200);
     }
-
 }

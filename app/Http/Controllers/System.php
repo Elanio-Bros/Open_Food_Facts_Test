@@ -13,10 +13,11 @@ class System extends Controller
     public function get_info_serve()
     {
         $response = [
-            'time_cron' => Cache::get('import_products'),
+            'time_cron' => Cache::get('import_products') ?? false,
             'db_connection' => $this->verify_connection_database(),
             'time' => date('Y-m-d H:i:s'),
-            'memory' => $this->usage_memory()
+            'memory' => $this->usage_memory(),
+            'erros_import' => Cache::get('erros_import') ?? false,
         ];
 
         return response()->json($response, 200);
