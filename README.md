@@ -1,8 +1,26 @@
-# Backend Challenge 20230105
+# Api Open Food Facts
 
+>  This is a challenge by [Coodesh](https://coodesh.com/)
+
+## Resume
+Api tem como ideia puxar dados do banco de dados público [Open Food Facts](https://br.openfoodfacts.org) utilizando da framework Laravel para a inserção dos dados no mongodb via cron, a criação de rotas para listagem e manipulação dos dados, criação de testes de integração do sistema e autenticação via JWT para seguraça.
+
+O sistema já vem com um admin pré-registrado:
+> User: admin <br/>
+> Email: admin@email.com.br <br/>
+> type: admin <br/>
+> Password: admin%123 <br/>
+
+E também com um user pré-registrado:
+> User: user <br/>
+> Email: user@email.com.br <br/>
+> type: user <br/>
+> Password: user_123 <br/>
 
 <details>
-<summary>Detalhes do Teste </summary>
+<summary> Detalhes do Teste</summary>
+
+# Detalhes do Teste [Coodesh](https://coodesh.com/)
 
 ## Introdução
 
@@ -69,7 +87,6 @@ Na REST API teremos um CRUD com os seguintes endpoints:
 - **Diferencial 6** Escrever um esquema de segurança utilizando `API KEY` nos endpoints. Ref: https://learning.postman.com/docs/sending-requests/authorization/#api-key
 
 
-
 ## Readme do Repositório
 
 - Deve conter o título do projeto
@@ -93,76 +110,119 @@ Na REST API teremos um CRUD com os seguintes endpoints:
 Use a [nossa comunidade](https://discord.gg/rdXbEvjsWu) para tirar dúvidas sobre o processo ou envie uma mensagem diretamente a um especialista no chat da plataforma. 
 </details>
 
-
-# Back-End-Developer-Test-Buzzvel
-## Resume
-The idea of ​​this project is to use the Laravel framework to start a plan management project, using system integration tests and authentication via JWT.
-The system already comes with a pre-registered user: 
-> User: User_1 <br/>
-> Email: user_1@email.com.br <br/>
-> Password: user_1%123 <br/>
-
-Below are two ways to run the application :
+<br/>
+A aplicação pode ser executado em dois modo:
 
 <details>
-<summary>Without Docker</summary>
+<summary>Com Docker</summary>
 
-### Essential
-Before activating the project, you must first configure the **.env** file. This file is extremely important for the project because it contains the main system settings. The [.env.example] file will serve as the basis for our system. The variables to be configured in this file are
+### Necessário
+ - [Docker](https://www.docker.com/) 
+ - [Docker-Compose](https://docs.docker.com/compose/)
 
-### Requirements
+Para começar, execute os comandos:
+
+1. Para construir a imagem e inicializar os contêineres:
+```bash
+docker-compose -f "docker-compose.yml" up -d --build
+```
+
+2. Execute este comando para uma configuração rápida da aplicação:
+
+``` bash
+docker exec -it api bash -c "cp .env.example .env; php artisan key:generate; php artisan jwt:secret; php artisan migrate --seed"
+```
+Ou execute estes abaixo para:
+
+3. Crie uma cópia do arquivo **.env**:
+```bash
+docker exec -it api cp .env.example .env
+```
+4. Gere a chave de criptografia do aplicativo:
+```bash
+docker exec -it api php artisan key:generate
+```
+5. Gerar chave de criptografia e autenticação JWT:
+```bash
+docker exec -it api php artisan jwt:secret
+```
+6. Crie bancos de dados e segmentos iniciais:
+```bash
+docker exec -it api php artisan migrate --seed
+```
+
+Com seu sistema agora configurado ele irá rodar para rodar nativamente na sua máquina em:[localhost](http://localhost/).
+
+Se desejar, execute os testes para analisar se as rotas na aplicação estão em ordem execute:
+```bash
+docker exec -it api php artisan test
+```
+Se você quiser usar um produto para testes, use o comando:
+```bash
+docker exec -it api php artisan db:seed --class=ProductSeeder
+```
+</details>
+
+
+<details>
+<summary>Sem Docker</summary>
+
+### Necessário
  - [PHP 8.0](https://www.php.net/)
  - [Composer](https://getcomposer.org/)
+
+### Importante
+Antes de ativar o projeto, você deve primeiro configurar o arquivo **.env**. Este arquivo é extremamente importante para o projeto porque contém as principais configurações do sistema. O arquivo [.env.example](./.env.example) servirá como base para o nosso sistema. As variáveis ​​a serem configuradas neste arquivo são
  
 <details>
-<summary>Settings in .env</summary>
+<summary>Configurações .env</summary>
 
 ### Database
-`DB_HOST`-> database host<br>
-`DB_DATABASE`->The main database<br>
-`DB_PORT`->Port used in the database system<br>
-`DB_USERNAME`->database user<br>
-`DB_PASSWORD`->database password<br>
+`DB_HOST`-> host de banco de dados<br>
+`DB_DATABASE`->O banco de dados principal<br>
+`DB_PORT`->Porta usada no sistema de banco de dados<br>
+`DB_USERNAME`->usuário do banco de dados<br>
+`DB_PASSWORD`->senha do banco de dados<br>
 
 </details>
 <br>
 
-After making the appropriate configurations in the **.env** file, run some terminal commands within the repository:
+Após fazer as configurações apropriadas no arquivo **.env**, execute alguns comandos de terminal dentro do repositório:
 
-1. Install all project dependencies with composer
+1. Instale todas as dependências do projeto com o composer:
 ```bash
 composer install
 ```
-2. Generate application encryption key
+2. Gerar chave de criptografia do aplicativo:
 ```bash
 php artisan key:generate
 ```
-3. Generate JWT encryption and authentication key
+3. Gerar chave de criptografia e autenticação JWT:
 ```bash
 php artisan jwt:secret
 ```
-4. Create databases and initial segments
+4. Crie bancos de dados e segmentos iniciais
 ```bash
 php artisan migrate --seed
 ```
-5. Start a local server
+5. Iniciar um servidor local
 ```bash
 php artisan serve
 ```
 
 ## Finished
-If you want to use it on an independent server, you must redirect to [/public/index.php](public/index.php) for the application to work correctly.
+Se você quiser usá-lo em um servidor independente, você deve redirecionar para [/public/index.php](public/index.php) para que o aplicativo funcione corretamente.
 
-If you want, run the tests to analyze whether the routes in the application are in order:
+Se desejar, execute os testes para analisar se as rotas na aplicação estão em ordem:
 ```bash
 php artisan test
 ```
 
-If you want to use a product for testing, use the command:
+Se você quiser usar um produto para testes, use o comando:
 ```bash
 php artisan db:seed --class=ProductSeeder
 ```
 
-To configure cron and queue in laravel, follow the configuration instructions:
+Para configurar o cron e a fila no laravel, siga as instruções de configuração:
 - [queue](https://laravel.com/docs/10.x/queues#running-the-queue-worker)
 - [cron](https://laravel.com/docs/10.x/scheduling#running-the-scheduler)
